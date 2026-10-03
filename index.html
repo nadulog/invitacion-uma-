@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#000000">
+  <meta name="description" content="Uma celebra sus XV y quiere compartir esta noche tan especial con vos. Te espera el 31 de octubre de 2026.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Mis XV · Uma">
+  <meta property="og:description" content="Una noche bajo las estrellas para celebrar los XV de Uma.">
+  <meta property="og:image" content="assets/uma-portada.jpeg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Mis XV · Uma">
+  <meta name="twitter:description" content="Uma te espera para celebrar sus XV el 31 de octubre de 2026.">
+  <title>Mis XV · Uma</title>
+  <link rel="preload" as="image" href="assets/uma-portada.jpeg">
+  <link rel="preload" as="font" type="font/woff2" href="assets/fonts/allura-latin-400.woff2" crossorigin>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="has-entered">
+  <canvas id="sparkleCanvas" aria-hidden="true"></canvas>
+  <button class="sound" id="soundToggle" type="button" aria-label="Reproducir música" aria-pressed="false">
+    <span class="sound__icon" aria-hidden="true">♪</span>
+  </button>
+  <audio id="invitationAudio" preload="auto" autoplay loop playsinline>
+    <source src="assets/musica-uma.mp3" type="audio/mpeg">
+  </audio>
+
+  <main id="invitation">
+    <section class="piece cover reveal" aria-label="Portada de los quince años de Uma">
+      <img class="cover__photo" src="assets/uma-portada.jpeg" alt="Uma sonriendo frente a la rueda de Ain Dubai" width="668" height="1003">
+      <div class="cover__veil" aria-hidden="true"></div>
+      <div class="cover__copy">
+        <p>Mis XV</p>
+        <h1 class="uma-signature">Uma</h1>
+      </div>
+    </section>
+
+    <div class="cover-wave" aria-hidden="true">
+      <svg viewBox="0 0 1440 240" preserveAspectRatio="none">
+        <path d="M0,58 C410,210 1030,210 1440,58 L1440,240 L0,240 Z"></path>
+      </svg>
+    </div>
+
+    <section class="piece piece--countdown reveal" aria-label="Cuenta regresiva para los quince años de Uma">
+      <img src="assets/cuenta-regresiva-fondo.png" alt="" width="864" height="1920">
+      <div class="countdown-wrap">
+        <p>Cada vez falta menos</p>
+        <div class="countdown" id="countdown" aria-live="polite">
+          <div><strong id="days">00</strong><span>Días</span></div>
+          <i aria-hidden="true">✦</i>
+          <div><strong id="hours">00</strong><span>Horas</span></div>
+          <i aria-hidden="true">✦</i>
+          <div><strong id="minutes">00</strong><span>Minutos</span></div>
+          <i aria-hidden="true">✦</i>
+          <div><strong id="seconds">00</strong><span>Segundos</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="memory-photo memory-photo--portrait reveal" aria-label="Recuerdo de la infancia de Uma">
+      <img src="assets/uma-recuerdo-infancia.jpeg" alt="Uma de niña sonriendo junto a un personaje" width="1130" height="1600" loading="lazy">
+    </section>
+
+    <section class="piece piece--date reveal" id="dateReveal" aria-label="Fecha y hora: sábado 31 de octubre de 2026, de 21:30 a 04:30">
+      <img src="assets/fecha.png" alt="Sábado 31 de octubre de 2026, de 21:30 a 04:30" width="864" height="1920">
+      <button class="hotspot hotspot--calendar" id="addCalendar" type="button" aria-label="Agregar los quince años de Uma al calendario"></button>
+      <canvas class="reveal-canvas" id="revealCanvas" aria-label="Pasá el dedo para descubrir la fecha"></canvas>
+      <div class="magic-trail" id="magicTrail" aria-hidden="true"></div>
+      <div class="reveal-guide" id="revealGuide" aria-hidden="true">
+        <strong>HAY UNA FECHA POR DESCUBRIR</strong>
+        <span>Pasá tu dedo sobre la pantalla</span>
+        <div class="finger-demo"><b>☝</b><i></i></div>
+      </div>
+    </section>
+
+    <section class="memory-photo memory-photo--portrait reveal" aria-label="Recuerdo de la infancia de Uma">
+      <img src="assets/uma-recuerdo-winnie.jpeg" alt="Uma de niña junto a Winnie Pooh y Tigger" width="1066" height="1600" loading="lazy">
+    </section>
+
+    <section class="piece piece--location reveal" aria-label="Cómo llegar a NACA Eventos">
+      <img src="assets/ubicacion.png" alt="NACA Eventos, Dardo Rocha 1750, Martínez" width="864" height="1920">
+      <button class="hotspot hotspot--location" type="button" data-open-modal="locationModal" aria-label="Ver cómo llegar a NACA Eventos"></button>
+    </section>
+
+    <section class="memory-photo memory-photo--portrait reveal" aria-label="Recuerdo de Uma">
+      <img src="assets/uma-recuerdo-hermanas.jpeg" alt="Uma de niña frente a frente con otra niña" width="1200" height="1600" loading="lazy">
+    </section>
+
+    <section class="piece reveal" aria-label="Dress code elegante. Evitar plateado y gris">
+      <img src="assets/dress-code.png" alt="Dress code elegante. Evitar los colores plateado y gris" width="864" height="1536">
+    </section>
+
+    <section class="memory-photo memory-photo--portrait reveal" aria-label="Fotografía de Uma en Dubái">
+      <img src="assets/uma-dubai-museo.jpeg" alt="Uma frente al Museo del Futuro de Dubái" width="960" height="1280" loading="lazy">
+    </section>
+
+    <section class="piece piece--gifts reveal" aria-label="Regalos">
+      <img src="assets/regalos.png" alt="Información para regalos" width="864" height="1920">
+      <button class="hotspot hotspot--gifts" type="button" data-open-modal="giftModal" aria-label="Ver datos para regalos"></button>
+    </section>
+
+    <section class="memory-photo memory-photo--portrait reveal" aria-label="Fotografía de Uma en Dubái">
+      <img src="assets/uma-dubai-noche.jpeg" alt="Uma de noche frente al Burj Khalifa" width="682" height="1024" loading="lazy">
+    </section>
+
+    <section class="piece piece--rsvp reveal" aria-label="Confirmación de asistencia antes del 26 de octubre de 2026">
+      <img src="assets/rsvp.png" alt="Confirmá tu asistencia antes del 26 de octubre de 2026" width="864" height="1536">
+      <a class="hotspot hotspot--rsvp" id="boton-confirmar" href="https://bloomdate-rsvp.netlify.app/r/cumple-xv-uma" target="_blank" rel="noopener noreferrer" aria-label="Confirmar asistencia a los quince años de Uma"></a>
+    </section>
+
+    <footer class="site-footer">
+      <p class="footer-love">Hecho con amor <span aria-label="corazón">♥</span> por BloomDate</p>
+      <nav class="footer-links" aria-label="Contacto de BloomDate">
+        <a href="https://wa.me/541140436324" target="_blank" rel="noopener noreferrer"><img src="https://cdn.simpleicons.org/whatsapp/e9e7e2" alt="WhatsApp"></a>
+        <a href="https://www.instagram.com/bloomdate.invitaciones/" target="_blank" rel="noopener noreferrer"><img src="https://cdn.simpleicons.org/instagram/e9e7e2" alt="Instagram"></a>
+        <a href="https://bloomdate-site.netlify.app/" target="_blank" rel="noopener noreferrer"><img src="https://api.iconify.design/lucide:globe-2.svg?color=%23e9e7e2" alt="Sitio web"></a>
+      </nav>
+    </footer>
+  </main>
+
+  <div class="modal" id="locationModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="locationTitle">
+    <div class="modal__backdrop" data-close-modal></div>
+    <div class="modal__panel modal__panel--location">
+      <button class="modal__close" type="button" data-close-modal aria-label="Cerrar">×</button>
+      <p class="modal__eyebrow">CÓMO LLEGAR</p>
+      <h2 id="locationTitle">NACA Eventos</h2>
+      <span class="location-modal__star" aria-hidden="true">✦</span>
+      <p>Dardo Rocha 1750<br>Martínez, Buenos Aires</p>
+      <a class="location-modal__button" href="https://www.google.com/maps/dir//Naca+eventos,+Dardo+Rocha+1750,+B1640+Mart%C3%ADnez,+Provincia+de+Buenos+Aires/@-34.553856,-58.5465856,14z/data=!4m8!4m7!1m0!1m5!1m1!1s0x95bcb1b516afc17f:0x78bf90c717636953!2m2!1d-58.5262099!2d-34.4907124?entry=ttu&amp;g_ep=EgoyMDI2MDkzMC4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener noreferrer">Abrir en Google Maps</a>
+    </div>
+  </div>
+
+  <div class="modal" id="giftModal" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Datos para regalos">
+    <div class="modal__backdrop" data-close-modal></div>
+    <div class="modal__panel modal__panel--image">
+      <img src="assets/regalos-datos-uma.png" alt="Cuenta a nombre de Uma Hidalgo, alias UMIFESTXV" width="942" height="1674">
+      <button class="modal__close" type="button" data-close-modal aria-label="Cerrar">×</button>
+      <button class="copy-alias" id="copyAlias" type="button">Copiar alias</button>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="script.js"></script>
+  <script>
+    (function () {
+      var token = new URLSearchParams(window.location.search).get('invite');
+      if (!token) return;
+      document.querySelectorAll('a[href*="/r/"]').forEach(function (a) {
+        var url = new URL(a.href);
+        url.searchParams.set('invite', token);
+        a.href = url.toString();
+      });
+    })();
+  </script>
+</body>
+</html>
