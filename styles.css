@@ -24,7 +24,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .cover__veil { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.64) 0%, rgba(0,0,0,.1) 26%, rgba(0,0,0,0) 54%, rgba(0,0,0,.28) 100%), radial-gradient(ellipse at 50% 8%, rgba(0,0,0,.08), rgba(0,0,0,0) 58%); pointer-events: none; }
 .cover__copy { position: absolute; z-index: 2; top: max(7.5%, env(safe-area-inset-top)); left: 5%; width: 90%; color: #fff; text-align: center; line-height: 1; text-shadow: 0 2px 18px rgba(0,0,0,.78), 0 0 42px rgba(0,0,0,.36); }
 .cover__copy p { margin: 0 0 .65rem; padding-left: .45em; font-size: clamp(.72rem, 3.1vw, 1rem); font-family: Arial, Helvetica, sans-serif; font-weight: 300; letter-spacing: .48em; text-transform: uppercase; }
-.cover__copy h1 { margin: 0; color: #050505; font-size: clamp(5.8rem, 27vw, 9rem); line-height: .9; text-shadow: 0 1px 3px rgba(255,255,255,.72), 0 5px 22px rgba(255,255,255,.28); }
+.cover__copy h1 { margin: clamp(.65rem, 2.5vw, 1rem) 0 0; color: #fff; font-size: clamp(5.8rem, 27vw, 9rem); line-height: .9; text-shadow: 0 3px 18px rgba(0,0,0,.92), 0 0 28px rgba(255,255,255,.22); }
 .cover-wave { position: relative; z-index: 2; width: 100%; height: clamp(130px, 34vw, 205px); margin-top: clamp(-150px, -25vw, -108px); margin-bottom: -1px; line-height: 0; pointer-events: none; }
 .cover-wave svg { display: block; width: 100%; height: 100%; }
 .cover-wave path { fill: #000; }
