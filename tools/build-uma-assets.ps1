@@ -30,6 +30,8 @@ function Draw-CenteredText($graphics, [string]$text, [float]$size, [float]$x, [f
 
 function Prepare-Graphics($image) {
   $graphics = [System.Drawing.Graphics]::FromImage($image)
+  $graphics.PageUnit = [System.Drawing.GraphicsUnit]::Pixel
+  $graphics.PageScale = 1
   $graphics.SmoothingMode = [System.Drawing.Drawing2D.SmoothingMode]::AntiAlias
   $graphics.TextRenderingHint = [System.Drawing.Text.TextRenderingHint]::AntiAliasGridFit
   $graphics.InterpolationMode = [System.Drawing.Drawing2D.InterpolationMode]::HighQualityBicubic
@@ -42,32 +44,87 @@ function Fill-Dark($graphics, [float]$x, [float]$y, [float]$width, [float]$heigh
   $brush.Dispose()
 }
 
+function Draw-CrystalThree($graphics) {
+  $font = [System.Drawing.Font]::new('Times New Roman', 405, [System.Drawing.FontStyle]::Regular, [System.Drawing.GraphicsUnit]::Pixel)
+  $format = New-CenteredFormat
+  $path = [System.Drawing.Drawing2D.GraphicsPath]::new()
+  $bounds = [System.Drawing.RectangleF]::new(128, 532, 405, 470)
+  $path.AddString('3', $font.FontFamily, [int]$font.Style, $font.Size, $bounds, $format)
+
+  $glow = [System.Drawing.Pen]::new([System.Drawing.Color]::FromArgb(55, 255, 255, 255), 13)
+  $graphics.DrawPath($glow, $path)
+  $glow.Dispose()
+
+  $base = [System.Drawing.Drawing2D.LinearGradientBrush]::new(
+    [System.Drawing.PointF]::new(0, 560),
+    [System.Drawing.PointF]::new(0, 990),
+    [System.Drawing.Color]::FromArgb(245, 250, 250, 250),
+    [System.Drawing.Color]::FromArgb(215, 112, 112, 112)
+  )
+  $graphics.FillPath($base, $path)
+  $base.Dispose()
+
+  $state = $graphics.Save()
+  $graphics.SetClip($path)
+  $random = [System.Random]::new(31)
+  $stepX = 48
+  $stepY = 44
+  for ($row = 0; $row -lt 11; $row++) {
+    for ($col = 0; $col -lt 9; $col++) {
+      $left = 130 + ($col * $stepX)
+      $top = 545 + ($row * $stepY)
+      $jitterX = $random.Next(-13, 14)
+      $jitterY = $random.Next(-11, 12)
+      $a = [System.Drawing.PointF]::new($left + $jitterX, $top + $jitterY)
+      $b = [System.Drawing.PointF]::new($left + $stepX + $random.Next(-9, 10), $top + $random.Next(-9, 10))
+      $c = [System.Drawing.PointF]::new($left + $stepX + $random.Next(-9, 10), $top + $stepY + $random.Next(-9, 10))
+      $d = [System.Drawing.PointF]::new($left + $random.Next(-9, 10), $top + $stepY + $random.Next(-9, 10))
+      $shadeA = $random.Next(52, 246)
+      $shadeB = $random.Next(78, 256)
+      $brushA = [System.Drawing.SolidBrush]::new([System.Drawing.Color]::FromArgb($random.Next(185, 256), $shadeA, $shadeA, $shadeA))
+      $brushB = [System.Drawing.SolidBrush]::new([System.Drawing.Color]::FromArgb($random.Next(185, 256), $shadeB, $shadeB, $shadeB))
+      $graphics.FillPolygon($brushA, @($a, $b, $c))
+      $graphics.FillPolygon($brushB, @($a, $c, $d))
+      $brushA.Dispose(); $brushB.Dispose()
+      $facetPen = [System.Drawing.Pen]::new([System.Drawing.Color]::FromArgb(95, 255, 255, 255), 1)
+      $graphics.DrawPolygon($facetPen, @($a, $b, $c, $d))
+      $facetPen.Dispose()
+    }
+  }
+  $graphics.Restore($state)
+
+  $outline = [System.Drawing.Pen]::new([System.Drawing.Color]::FromArgb(238, 255, 255, 255), 2)
+  $graphics.DrawPath($outline, $path)
+  $outline.Dispose(); $path.Dispose(); $format.Dispose(); $font.Dispose()
+}
+
 # Fecha y hora
 $image = New-Canvas 'fecha-base.png'
 $graphics = Prepare-Graphics $image
-Fill-Dark $graphics 70 430 724 930 4
 $acuteA = [char]0x00C1
 $acuteI = [char]0x00CD
 $acuteO = [char]0x00D3
 $middleDot = [char]0x00B7
 $star = [char]0x2726
-Draw-CenteredText $graphics "S $acuteA B A D O" 38 70 455 724 80
 
-$dayFont = [System.Drawing.Font]::new('Times New Roman', 340, [System.Drawing.FontStyle]::Regular, [System.Drawing.GraphicsUnit]::Pixel)
-$dayPath = [System.Drawing.Drawing2D.GraphicsPath]::new()
-$dayFormat = New-CenteredFormat
-$dayPath.AddString('31', $dayFont.FontFamily, [int]$dayFont.Style, $dayFont.Size, [System.Drawing.RectangleF]::new(90, 535, 684, 410), $dayFormat)
-$dayBrush = [System.Drawing.Drawing2D.LinearGradientBrush]::new([System.Drawing.PointF]::new(0, 540), [System.Drawing.PointF]::new(0, 960), [System.Drawing.Color]::White, [System.Drawing.Color]::FromArgb(110, 110, 110))
-$graphics.FillPath($dayBrush, $dayPath)
-$outline = [System.Drawing.Pen]::new([System.Drawing.Color]::FromArgb(245, 245, 245), 2)
-$graphics.DrawPath($outline, $dayPath)
-$orbit = [System.Drawing.Pen]::new([System.Drawing.Color]::FromArgb(150, 220, 220, 220), 2)
-$graphics.DrawEllipse($orbit, 62, 690, 740, 200)
-$graphics.DrawEllipse($orbit, 105, 665, 655, 245)
-$orbit.Dispose(); $outline.Dispose(); $dayBrush.Dispose(); $dayPath.Dispose(); $dayFormat.Dispose(); $dayFont.Dispose()
+# Conservar la placa original de Emilia: solo se limpia el 2 y los dos renglones variables.
+$originalOne = $image.Clone([System.Drawing.Rectangle]::new(450, 545, 235, 470), [System.Drawing.Imaging.PixelFormat]::Format32bppArgb)
+Fill-Dark $graphics 125 545 325 470 3
+Fill-Dark $graphics 70 1015 724 125 3
+Fill-Dark $graphics 245 1200 365 145 3
 
-Draw-CenteredText $graphics "O C T U B R E  $middleDot  2 0 2 6" 35 70 1000 724 90
-Draw-CenteredText $graphics '21:30 A 04:30 HS' 49 70 1180 724 100
+Draw-CrystalThree $graphics
+$graphics.DrawImage($originalOne, 450, 545)
+$originalOne.Dispose()
+
+# Reponer las orbitas sobre el nuevo numero, manteniendo la estetica de la placa original.
+$orbit = [System.Drawing.Pen]::new([System.Drawing.Color]::FromArgb(155, 218, 218, 218), 1.7)
+$graphics.DrawEllipse($orbit, 60, 682, 742, 205)
+$graphics.DrawEllipse($orbit, 106, 660, 650, 250)
+$orbit.Dispose()
+
+Draw-CenteredText $graphics "O C T U B R E  $middleDot  2 0 2 6" 35 70 1012 724 96
+Draw-CenteredText $graphics '21:30 A 04:30 HS' 49 70 1190 724 110
 $graphics.Dispose()
 Save-Canvas $image 'fecha.png'
 

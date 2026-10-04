@@ -19,6 +19,15 @@ const types = {
 http.createServer((request, response) => {
   const pathname = decodeURIComponent(new URL(request.url, `http://${request.headers.host}`).pathname);
   const relative = pathname === '/' ? 'index.html' : pathname.replace(/^\/+/, '');
+  const publicFile = relative === 'index.html' || relative === 'styles.css' || relative === 'script.js';
+  const publicAsset = relative.startsWith('assets/');
+
+  if (!publicFile && !publicAsset) {
+    response.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
+    response.end('No encontrado');
+    return;
+  }
+
   const file = path.resolve(root, relative);
 
   if (!file.startsWith(root + path.sep) || !fs.existsSync(file) || !fs.statSync(file).isFile()) {
